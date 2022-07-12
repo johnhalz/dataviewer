@@ -1,5 +1,4 @@
 from dearpygui import dearpygui as dpg
-import plyer
 from general_util.file import File
 
 class TopBarView:
@@ -12,7 +11,8 @@ class TopBarView:
         self.view()
 
     def open_file_explorer(self):
-        self.file_paths = plyer.filechooser.open_file()
+        # TODO: Figure out how to call for OS default file explorer and select many files (keep an eye of plyer)
+        pass
 
     def view(self):
         with dpg.window(label="Test Manager",
