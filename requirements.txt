@@ -1,0 +1,5 @@
+dearpygui
+screeninfo
+easygui
+
+general_util
