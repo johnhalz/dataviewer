@@ -1,6 +1,5 @@
 from dearpygui import dearpygui as dpg
-import tkinter
-from tkinter import filedialog as fd
+import plyer
 
 class TopBarView:
 
@@ -13,8 +12,8 @@ class TopBarView:
 
 
     def open_file_explorer(self):
-        tkinter.Tk().withdraw()     # Prevent empty tk window from opening
-        self.file_path = fd.askopenfilename()
+
+        self.file_path = plyer.filechooser.open_file()[0]
 
         dpg.set_value(item='file_path_text', value=self.file_path)  # Update text field with new file path
 
@@ -25,4 +24,3 @@ class TopBarView:
             with dpg.group(horizontal=True, ):
                 dpg.add_button(label="Open...", callback=self.open_file_explorer)
                 dpg.add_input_text(default_value='', tag='file_path_text', hint='Enter file path here')
-                # dpg.add_button(label="Save Init", callback=lambda: dpg.save_init_file("config/custom_gui_layout.ini"))

@@ -1,7 +1,0 @@
-dearpygui
-screeninfo
-tk
-
-general_util
-
-pyinstaller

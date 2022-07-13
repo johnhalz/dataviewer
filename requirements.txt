@@ -1,5 +1,7 @@
 dearpygui
 screeninfo
-tk
+plyer
 
 general_util
+
+pyinstaller
