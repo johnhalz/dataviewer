@@ -1,4 +1,4 @@
-from .top_bar_view import TopBarView
+from .topbar_view import TopBarView
 
 def screen_size():
     from screeninfo import get_monitors
@@ -14,8 +14,9 @@ def main_view():
 
     dpg.create_context()
 
-    with dpg.window(label='MainWindow', tag='MainWindow') as main_window:
+    with dpg.window(label='MainWindow', tag='MainWindow', no_background=True) as main_window:
         TopBarView()
+
 
     screen_width, screen_height = screen_size()
     screen_ratio = [0.5, 0.65]
