@@ -1,5 +1,5 @@
 dearpygui
 screeninfo
-easygui
+tk
 
 general_util
