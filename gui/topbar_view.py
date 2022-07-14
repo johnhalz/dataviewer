@@ -1,6 +1,8 @@
 from dearpygui import dearpygui as dpg
 import plyer
+from general_util import File
 
+# TODO: Replace TopBarView with DPG menu bar
 class TopBarView:
 
     def __init__(self) -> None:
@@ -13,7 +15,9 @@ class TopBarView:
 
     def open_file_explorer(self):
 
-        self.file_path = plyer.filechooser.open_file()[0]
+        self.file_path = plyer.filechooser.open_file(multpile=True)
+
+        # TODO: Check if file paths are h5 or not
 
         dpg.set_value(item='file_path_text', value=self.file_path)  # Update text field with new file path
 
