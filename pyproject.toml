@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "h5viewer"
+version = "0.1.0"
+description = "GUI app to open and view h5 files"
+authors = ["John Halazonetis <john.halazonetis@icloud.com>"]
+license = "MIT License"
+
+[tool.poetry.dependencies]
+python = ">=3.7,<3.11"
+screeninfo = "^0.8"
+plyer = "^2.0.0"
+general-util = "^1.0.1"
+pyinstaller = "^5.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
