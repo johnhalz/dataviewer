@@ -1,6 +1,6 @@
 dearpygui
 screeninfo
-plyer
+# plyer2
 
 general_util
 
