@@ -6,5 +6,5 @@ class DataView:
         self.view()
 
     def view(self):
-        with dpg.window(label="Data View", width=400, height=400, tag="data_view", autosize=True):
+        with dpg.window(label="Data View", tag="data_view", autosize=True, no_close=True, no_collapse=True, no_move=True):
             dpg.add_text("There should be a table view here.")

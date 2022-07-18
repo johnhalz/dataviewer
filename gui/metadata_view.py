@@ -6,5 +6,5 @@ class MetadataView:
         self.view()
 
     def view(self):
-        with dpg.window(label="Metadata View", width=400, height=400, tag="metadata_view", autosize=True):
+        with dpg.window(label="Metadata View", tag="metadata_view", autosize=True, no_close=True, no_collapse=True, no_move=True):
             dpg.add_text("There should be a list of different values here")

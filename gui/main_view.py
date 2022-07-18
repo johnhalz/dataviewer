@@ -37,13 +37,13 @@ def main_view():
             dpg.add_menu_item(label="Save As")
 
         with dpg.menu(label="Developer"):
-            dpg.add_menu_item(label="Save Init File")
+            dpg.add_menu_item(label="Save Init File", callback=lambda: dpg.save_init_file("config/custom_gui_layout.ini"))
 
         with dpg.menu(label="Help"):
             dpg.add_menu_item(label="About")
             dpg.add_menu_item(label="Show Developer Options")
 
-    dpg.configure_app(docking=True, docking_space=True)
+    dpg.configure_app(docking=True, docking_space=True, init_file="config/custom_gui_layout.ini", load_init_file=True)
     dpg.setup_dearpygui()
     dpg.set_primary_window(main_window, True) # Fill viewport
     dpg.show_viewport()
