@@ -36,16 +36,21 @@ def main_view():
             dpg.add_menu_item(label="Open...")
             dpg.add_menu_item(label="Save As")
 
-        with dpg.menu(label="Developer"):
+        with dpg.menu(label="Developer", tag='developer_menu', show=False):
             dpg.add_menu_item(label="Save Init File", callback=lambda: dpg.save_init_file("config/custom_gui_layout.ini"))
+            dpg.add_menu_item(label="Show Metrics", callback=lambda: dpg.show_metrics())
+            dpg.add_menu_item(label="Show Font Manager", callback=lambda: dpg.show_font_manager())
 
         with dpg.menu(label="Help"):
             dpg.add_menu_item(label="About")
-            dpg.add_menu_item(label="Show Developer Options")
+            dpg.add_menu_item(label="Show Developer Options", tag='show_dev_button', show=True, callback=lambda: dpg.show_item(item='developer_menu'))
+            dpg.add_menu_item(label="Hide Developer Options", tag='hide_dev_button', show=True, callback=lambda: dpg.hide_item(item='developer_menu'))
 
     dpg.configure_app(docking=True, docking_space=True, init_file="config/custom_gui_layout.ini", load_init_file=True)
     dpg.setup_dearpygui()
     dpg.set_primary_window(main_window, True) # Fill viewport
+    
+    
     dpg.show_viewport()
     dpg.start_dearpygui()
     dpg.destroy_context()
