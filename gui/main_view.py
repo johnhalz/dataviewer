@@ -23,8 +23,12 @@ def screen_size():
     return screen.width, screen.height
 
 def open_file_dialog(data: DataHandler):
-    if platform == 'win32':
-        files = filechooser.open_file(multiple=True)
+    import tkinter as tk
+    from tkinter import filedialog
+
+    root = tk.Tk()
+    root.withdraw()
+    files = filedialog.askopenfilename()
     
     data.add_files(files)
 
