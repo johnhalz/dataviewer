@@ -1,6 +1,17 @@
+from sys import platform
+from plyer import filechooser
+
 from .selector_view import SelectorView
 from .metadata_view import MetadataView
 from .data_view import DataView
+
+import dearpygui.dearpygui as dpg
+
+from sys import path
+from os.path import dirname, join, abspath
+path.insert(0, abspath(join(dirname(__file__), '..')))
+
+from data_handler.data_handler import DataHandler
 
 def screen_size():
     from screeninfo import get_monitors
@@ -11,16 +22,23 @@ def screen_size():
 
     return screen.width, screen.height
 
+def open_file_dialog(data: DataHandler):
+    if platform == 'win32':
+        files = filechooser.open_file(multiple=True)
+    
+    data.add_files(files)
+
 def main_view():
-    import dearpygui.dearpygui as dpg
 
     dpg.create_context()
+
 
     with dpg.window(label='MainWindow', tag='MainWindow', no_background=True) as main_window:
         SelectorView()
         MetadataView()
         DataView()
 
+    data_handler = DataHandler()
 
     screen_width, screen_height = screen_size()
     screen_ratio = [0.5, 0.65]
@@ -33,8 +51,7 @@ def main_view():
 
     with dpg.viewport_menu_bar():
         with dpg.menu(label="File"):
-            dpg.add_menu_item(label="Open...")
-            dpg.add_menu_item(label="Save As")
+            dpg.add_menu_item(label="Open...", callback=lambda: open_file_dialog(data_handler))
 
         with dpg.menu(label="Developer", tag='developer_menu', show=False):
             dpg.add_menu_item(label="Save Init File", callback=lambda: dpg.save_init_file("config/custom_gui_layout.ini"))
