@@ -3,6 +3,7 @@ from sys import platform
 from .selector_view import SelectorView
 from .metadata_view import MetadataView
 from .data_view import DataView
+from .about_view import AboutView
 
 import dearpygui.dearpygui as dpg
 
@@ -48,6 +49,7 @@ def main_view():
         SelectorView()
         MetadataView()
         DataView()
+            AboutView()
 
     screen_width, screen_height = screen_size()
     screen_ratio = [0.5, 0.65]
@@ -68,7 +70,7 @@ def main_view():
             dpg.add_menu_item(label="Show Font Manager", callback=lambda: dpg.show_font_manager())
 
         with dpg.menu(label="Help"):
-            dpg.add_menu_item(label="About")
+                dpg.add_menu_item(label="About", callback=lambda: dpg.configure_item(item='about_view', show=True))
             dpg.add_menu_item(label="Show Developer Options", tag='show_dev_button', show=True, callback=lambda: dpg.show_item(item='developer_menu'))
             dpg.add_menu_item(label="Hide Developer Options", tag='hide_dev_button', show=True, callback=lambda: dpg.hide_item(item='developer_menu'))
 
