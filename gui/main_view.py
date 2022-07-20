@@ -69,8 +69,10 @@ class MainView:
 
 
     def _toggle_dev_mode(self):
+        # Update dev mode variable
         self.dev_mode = not self.dev_mode
 
+        # Update menu bar
         if self.dev_mode:
             dpg.show_item(item='developer_menu')
             dpg.hide_item(item='show_dev_button')
