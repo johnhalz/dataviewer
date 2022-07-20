@@ -1,5 +1,4 @@
 from sys import platform
-from plyer import filechooser
 
 from .selector_view import SelectorView
 from .metadata_view import MetadataView
@@ -23,12 +22,19 @@ def screen_size():
     return screen.width, screen.height
 
 def open_file_dialog(data: DataHandler):
-    import tkinter as tk
-    from tkinter import filedialog
+    
+    # Windows
+    if platform == 'win32' or platform == 'linux':
+        import tkinter as tk
+        from tkinter import filedialog
 
-    root = tk.Tk()
-    root.withdraw()
-    files = filedialog.askopenfilename()
+        root = tk.Tk()
+        root.withdraw()
+        files = filedialog.askopenfilename()
+
+    # macOS
+    elif platform == 'darwin':
+        pass
     
     data.add_files(files)
 
@@ -36,13 +42,12 @@ def main_view():
 
     dpg.create_context()
 
-
-    with dpg.window(label='MainWindow', tag='MainWindow', no_background=True) as main_window:
+    data_handler = DataHandler()
+    
+    with dpg.window(label='MainWindow', tag='main_window', no_background=True) as main_window:
         SelectorView()
         MetadataView()
         DataView()
-
-    data_handler = DataHandler()
 
     screen_width, screen_height = screen_size()
     screen_ratio = [0.5, 0.65]
@@ -75,4 +80,3 @@ def main_view():
     dpg.show_viewport()
     dpg.start_dearpygui()
     dpg.destroy_context()
-
