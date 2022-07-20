@@ -2,6 +2,9 @@ dearpygui
 screeninfo
 tk
 
+pandas
+h5py
+
 general_util
 
 pyinstaller
