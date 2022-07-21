@@ -9,4 +9,4 @@ class DataView:
 
     def view(self):
         with dpg.window(label="Data View", tag=self.tag, autosize=True, no_close=True, no_collapse=True, no_move=True):
-            dpg.add_text("There should be a table view here.")
+            dpg.add_button(label="No File Selected", width=-1, height=-1, enabled=False)

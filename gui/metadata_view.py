@@ -9,4 +9,4 @@ class MetadataView:
 
     def view(self):
         with dpg.window(label="Metadata View", tag=self.tag, autosize=True, no_close=True, no_collapse=True, no_move=True):
-            dpg.add_text("There should be a list of different values here")
+            dpg.add_button(label="No File Selected", width=-1, height=-1, enabled=False)

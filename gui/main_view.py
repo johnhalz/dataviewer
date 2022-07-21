@@ -26,9 +26,11 @@ class MainView:
     def view(self):
 
         dpg.create_context()
+
+        self._make_centered_text_possible()
         
         with dpg.window(label='MainWindow', tag='main_window', no_background=True) as main_window:
-            SelectorView()
+            SelectorView(data_handler=self.data_handler)
             MetadataView()
             DataView()
             AboutView()
@@ -52,7 +54,6 @@ class MainView:
                 dpg.add_separator()
                 dpg.add_menu_item(label="Dark Theme (default)")
                 dpg.add_menu_item(label="Light Theme")
-
 
             with dpg.menu(label="Help"):
                 dpg.add_menu_item(label="About", callback=lambda: dpg.configure_item(item='about_view', show=True))
@@ -103,9 +104,23 @@ class MainView:
             root = tk.Tk()
             root.withdraw()
             files = filedialog.askopenfilename()
+            data.add_files(files)
 
         # macOS
         elif platform == 'darwin':
+            print("Function not implemented yet")
             pass
         
-        data.add_files(files)
+
+    
+    def _make_centered_text_possible(self):
+        """
+        Make a disabled button act as centered text
+        """
+        with dpg.theme() as global_theme:
+            with dpg.theme_component(dpg.mvButton, enabled_state=False):
+                dpg.add_theme_color(dpg.mvThemeCol_Text, [255, 255, 255])
+                dpg.add_theme_color(dpg.mvThemeCol_Button, [0, 0, 0, 0])
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, [0, 0, 0, 0])
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, [0, 0, 0, 0])
+        dpg.bind_theme(global_theme)
