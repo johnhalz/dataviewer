@@ -139,16 +139,17 @@ class MainView:
         self.data_handler.add_files(file_paths)
         self._update_tree_view()
 
+
     def _update_tree_view(self):
         # If there are no files in the file list
         if self.data_handler.files == {}:
             dpg.show_item(item='sv_no_files')
-            dpg.disable_item(item='tree_search')
+            dpg.configure_item(item='tree_search', show=False)
 
         # If there are files present in the file list
         else:
             dpg.hide_item(item='sv_no_files')
-            dpg.enable_item(item='tree_search')
+            dpg.configure_item(item='tree_search', show=True)
 
             for file in self.data_handler.newly_added_files.keys():
                 file_node = dpg.add_tree_node(label=File.only_filename(input_path=str(file)),
