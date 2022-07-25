@@ -108,6 +108,22 @@ class MainView:
         files = file_dialog.open_file()
         self.data_handler.add_files(files)
         self._update_tree_view()
+
+
+    def _open_folder(self):
+        file_dialog = FileDialog()
+        directory = file_dialog.open_dir()
+
+        # Loop through h5 files in folder
+        file_paths = []
+        for root, _, files in os.walk(directory):
+            for file in files:
+                # Only handle h5 files
+                if File.get_file_extension(file) == '.h5':
+                    file_paths.append(os.path.join(root, file))     # Get full path
+        
+        self.data_handler.add_files(file_paths)
+        self._update_tree_view()
         
     
     def _make_centered_text_possible(self):
