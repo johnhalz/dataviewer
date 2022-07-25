@@ -46,20 +46,20 @@ class MainView:
 
         with dpg.viewport_menu_bar():
             with dpg.menu(label="File"):
-                dpg.add_menu_item(label="Open...", callback=lambda: self._open_file_dialog(self.data_handler))
+                dpg.add_menu_item(label="Open...", callback=self._open_file)
 
             with dpg.menu(label="Developer", tag='developer_menu', show=self.dev_mode):
                 dpg.add_menu_item(label="Save Init File", callback=lambda: dpg.save_init_file("config/custom_gui_layout.ini"))
-                dpg.add_menu_item(label="Show Metrics", callback=lambda: dpg.show_metrics())
-                dpg.add_menu_item(label="Show Font Manager", callback=lambda: dpg.show_font_manager())
+                dpg.add_menu_item(label="Show Metrics", callback=dpg.show_metrics)
+                dpg.add_menu_item(label="Show Font Manager", callback=dpg.show_font_manager)
                 dpg.add_separator()
                 dpg.add_menu_item(label="Dark Theme (default)")
                 dpg.add_menu_item(label="Light Theme")
 
             with dpg.menu(label="Help"):
                 dpg.add_menu_item(label="About", callback=lambda: dpg.configure_item(item='about_view', show=True))
-                dpg.add_menu_item(label="Show Developer Options", tag='show_dev_button', show=not self.dev_mode, callback=lambda: self._toggle_dev_mode())
-                dpg.add_menu_item(label="Hide Developer Options", tag='hide_dev_button', show=self.dev_mode, callback=lambda: self._toggle_dev_mode())
+                dpg.add_menu_item(label="Show Developer Options", tag='show_dev_button', show=not self.dev_mode, callback=self._toggle_dev_mode)
+                dpg.add_menu_item(label="Hide Developer Options", tag='hide_dev_button', show=self.dev_mode, callback=self._toggle_dev_mode)
 
         dpg.configure_app(docking=True, docking_space=True, init_file="config/custom_gui_layout.ini", load_init_file=True)
         dpg.setup_dearpygui()
@@ -95,8 +95,7 @@ class MainView:
         return screen.width, screen.height
 
 
-    def _open_file_dialog(self, data: DataHandler):
-        
+    def _open_file(self):
         file_dialog = FileDialog()
         files = file_dialog.open_file()
         self.data_handler.add_files(files)
