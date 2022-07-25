@@ -1,3 +1,4 @@
+import os
 from general_util import FileDialog, File
 
 from .selector_view import SelectorView
@@ -162,11 +163,6 @@ class MainView:
 
                     for table in self.data_handler.newly_added_files[file][group].keys():
                         tag = f'{File.only_filename(input_path=str(file), with_extension=False)}/{group}/{table}'
-                        table_node = dpg.add_tree_node(label=table,
+                        table_node = dpg.add_selectable(label=table,
                                                        parent=group_node,
-                                                       selectable=True,
-                                                       leaf=True,
-                                                       bullet=True,
-                                                       tag=tag)
-
-                        # dpg.set_item_callback(item=tag, callback=lambda: print(self.data_handler.files[file][group][table].attrs.keys()))
+                                                       callback=lambda: print(self.data_handler.files[file][group][table].attrs))
