@@ -1,4 +1,5 @@
 from sys import platform
+from general_util import FileDialog
 
 from .selector_view import SelectorView
 from .metadata_view import MetadataView
@@ -96,22 +97,10 @@ class MainView:
 
     def _open_file_dialog(self, data: DataHandler):
         
-        # Windows
-        if platform == 'win32' or platform == 'linux':
-            import tkinter as tk
-            from tkinter import filedialog
-
-            root = tk.Tk()
-            root.withdraw()
-            files = filedialog.askopenfilename()
-            data.add_files(files)
-
-        # macOS
-        elif platform == 'darwin':
-            print("Function not implemented yet")
-            pass
+        file_dialog = FileDialog()
+        files = file_dialog.open_file()
+        self.data_handler.add_files(files)
         
-
     
     def _make_centered_text_possible(self):
         """
