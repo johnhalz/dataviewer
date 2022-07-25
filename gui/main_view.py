@@ -53,8 +53,13 @@ class MainView:
 
             with dpg.menu(label="Developer", tag='developer_menu', show=self.dev_mode):
                 dpg.add_menu_item(label="Save Init File", callback=lambda: dpg.save_init_file("config/custom_gui_layout.ini"))
+                dpg.add_menu_item(label="Show About", callback=lambda:dpg.show_tool(dpg.mvTool_About))
                 dpg.add_menu_item(label="Show Metrics", callback=dpg.show_metrics)
+                dpg.add_menu_item(label="Show Documentation", callback=lambda:dpg.show_tool(dpg.mvTool_Doc))
+                dpg.add_menu_item(label="Show Debug", callback=lambda:dpg.show_tool(dpg.mvTool_Debug))
+                dpg.add_menu_item(label="Show Style Editor", callback=lambda:dpg.show_tool(dpg.mvTool_Style))
                 dpg.add_menu_item(label="Show Font Manager", callback=dpg.show_font_manager)
+                dpg.add_menu_item(label="Show Item Registry", callback=lambda:dpg.show_tool(dpg.mvTool_ItemRegistry))
                 dpg.add_separator()
                 dpg.add_menu_item(label="Dark Theme (default)")
                 dpg.add_menu_item(label="Light Theme")
