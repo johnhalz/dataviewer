@@ -88,14 +88,9 @@ class MainView:
         dpg.configure_item(item=self.dataview.tag, no_move=not self.dev_mode, autosize=not self.dev_mode, no_collapse=not self.dev_mode)
 
         # Update menu bar
-        if self.dev_mode:
-            dpg.show_item(item='developer_menu')
-            dpg.hide_item(item='show_dev_button')
-            dpg.show_item(item='hide_dev_button')
-        else:
-            dpg.hide_item(item='developer_menu')
-            dpg.show_item(item='show_dev_button')
-            dpg.hide_item(item='hide_dev_button')
+        dpg.configure_item(item='developer_menu', show=self.dev_mode)
+        dpg.configure_item(item='show_dev_button', show=not self.dev_mode)
+        dpg.configure_item(item='hide_dev_button', show=self.dev_mode)
 
     
     def _screen_size(self):
