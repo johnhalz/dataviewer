@@ -46,7 +46,10 @@ class MainView:
 
         with dpg.viewport_menu_bar():
             with dpg.menu(label="File"):
-                dpg.add_menu_item(label="Open...", callback=self._open_file)
+                dpg.add_menu_item(label="Open Files...", callback=self._open_file, shortcut="Ctrl O")
+                dpg.add_menu_item(label="Open Folder...", callback=self._open_folder, shortcut="Ctrl Shift O")
+                with dpg.menu(label='Open Recent'):
+                    dpg.add_menu_item(label="(None)", enabled=False)
 
             with dpg.menu(label="Developer", tag='developer_menu', show=self.dev_mode):
                 dpg.add_menu_item(label="Save Init File", callback=lambda: dpg.save_init_file("config/custom_gui_layout.ini"))
