@@ -6,10 +6,11 @@ class DataHandler:
         self.file_list: list = file_list
 
     def add_files(self, files):
-        if files is str:
-            self.file_list.append(files)
-
-        elif files is list:
+        
+        if files is list:
             self.file_list += files
+
+        else:
+            self.file_list.append(str(files))
             
         print(self.file_list)
