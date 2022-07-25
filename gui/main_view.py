@@ -74,6 +74,7 @@ class MainView:
         # Update dev mode variable
         self.dev_mode = not self.dev_mode
 
+        # Configure windows in app
         dpg.configure_item(item=self.selectorview.tag, no_move=not self.dev_mode, autosize=not self.dev_mode, no_collapse=not self.dev_mode)
         dpg.configure_item(item=self.metdataview.tag, no_move=not self.dev_mode, autosize=not self.dev_mode, no_collapse=not self.dev_mode)
         dpg.configure_item(item=self.dataview.tag, no_move=not self.dev_mode, autosize=not self.dev_mode, no_collapse=not self.dev_mode)
