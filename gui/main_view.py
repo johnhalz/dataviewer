@@ -52,6 +52,9 @@ class MainView:
                 with dpg.menu(label='Open Recent'):
                     dpg.add_menu_item(label="(None)", enabled=False)
 
+                dpg.add_separator()
+                dpg.add_menu_item(label="Preferences")
+
             with dpg.menu(label="Developer", tag='developer_menu', show=self.dev_mode):
                 dpg.add_menu_item(label="Save Init File", callback=lambda: dpg.save_init_file("config/custom_gui_layout.ini"))
                 dpg.add_menu_item(label="Show About", callback=lambda:dpg.show_tool(dpg.mvTool_About))
