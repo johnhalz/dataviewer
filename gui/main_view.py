@@ -1,5 +1,4 @@
-from sys import platform
-from general_util import FileDialog
+from general_util import FileDialog, File
 
 from .selector_view import SelectorView
 from .metadata_view import MetadataView
@@ -31,12 +30,13 @@ class MainView:
         self._make_centered_text_possible()
         
         with dpg.window(label='MainWindow', tag='main_window', no_background=True) as main_window:
-            SelectorView(data_handler=self.data_handler)
-            MetadataView()
-            DataView()
-            AboutView()
+            self.selectorview = SelectorView()
+            self.metdataview = MetadataView()
+            self.dataview = DataView()
+            self.aboutview = AboutView()
 
         screen_width, screen_height = self._screen_size()
+        self._update_tree_view()
 
         dpg.create_viewport(title='H5 Viewer',
                             width=int(screen_width*self.screen_ratio[0]),
@@ -99,6 +99,7 @@ class MainView:
         file_dialog = FileDialog()
         files = file_dialog.open_file()
         self.data_handler.add_files(files)
+        self._update_tree_view()
         
     
     def _make_centered_text_possible(self):
@@ -112,3 +113,36 @@ class MainView:
                 dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, [0, 0, 0, 0])
                 dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, [0, 0, 0, 0])
         dpg.bind_theme(global_theme)
+
+
+    def _update_tree_view(self):
+        # If there are no files in the file list
+        if self.data_handler.files == {}:
+            dpg.show_item(item='sv_no_files')
+            dpg.disable_item(item='tree_search')
+
+        # If there are files present in the file list
+        else:
+            dpg.hide_item(item='sv_no_files')
+            dpg.enable_item(item='tree_search')
+
+            for file in self.data_handler.newly_added_files.keys():
+                file_node = dpg.add_tree_node(label=File.only_filename(input_path=str(file)),
+                                              parent=self.selectorview.tag,
+                                              selectable=True)
+
+                for group in self.data_handler.newly_added_files[file].keys():
+                    group_node = dpg.add_tree_node(label=group,
+                                                   parent=file_node,
+                                                   selectable=True)
+
+                    for table in self.data_handler.newly_added_files[file][group].keys():
+                        tag = f'{File.only_filename(input_path=str(file), with_extension=False)}/{group}/{table}'
+                        table_node = dpg.add_tree_node(label=table,
+                                                       parent=group_node,
+                                                       selectable=True,
+                                                       leaf=True,
+                                                       bullet=True,
+                                                       tag=tag)
+
+                        # dpg.set_item_callback(item=tag, callback=lambda: print(self.data_handler.files[file][group][table].attrs.keys()))
