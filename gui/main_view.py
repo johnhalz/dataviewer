@@ -61,9 +61,6 @@ class MainView:
                 dpg.add_menu_item(label="Show Style Editor", callback=lambda:dpg.show_tool(dpg.mvTool_Style))
                 dpg.add_menu_item(label="Show Font Manager", callback=dpg.show_font_manager)
                 dpg.add_menu_item(label="Show Item Registry", callback=lambda:dpg.show_tool(dpg.mvTool_ItemRegistry))
-                dpg.add_separator()
-                dpg.add_menu_item(label="Dark Theme (default)")
-                dpg.add_menu_item(label="Light Theme")
 
             with dpg.menu(label="Help"):
                 dpg.add_menu_item(label="About", callback=lambda: dpg.configure_item(item='about_view', show=True))
@@ -102,6 +99,19 @@ class MainView:
         screen = get_monitors()[0]
 
         return screen.width, screen.height
+        
+    
+    def _make_centered_text_possible(self):
+        """
+        Make a disabled button act as centered text
+        """
+        with dpg.theme() as global_theme:
+            with dpg.theme_component(dpg.mvButton, enabled_state=False):
+                dpg.add_theme_color(dpg.mvThemeCol_Text, [255, 255, 255])
+                dpg.add_theme_color(dpg.mvThemeCol_Button, [0, 0, 0, 0])
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, [0, 0, 0, 0])
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, [0, 0, 0, 0])
+        dpg.bind_theme(global_theme)
 
 
     def _open_file(self):
@@ -125,20 +135,6 @@ class MainView:
         
         self.data_handler.add_files(file_paths)
         self._update_tree_view()
-        
-    
-    def _make_centered_text_possible(self):
-        """
-        Make a disabled button act as centered text
-        """
-        with dpg.theme() as global_theme:
-            with dpg.theme_component(dpg.mvButton, enabled_state=False):
-                dpg.add_theme_color(dpg.mvThemeCol_Text, [255, 255, 255])
-                dpg.add_theme_color(dpg.mvThemeCol_Button, [0, 0, 0, 0])
-                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, [0, 0, 0, 0])
-                dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, [0, 0, 0, 0])
-        dpg.bind_theme(global_theme)
-
 
     def _update_tree_view(self):
         # If there are no files in the file list
@@ -162,7 +158,6 @@ class MainView:
                                                    selectable=True)
 
                     for table in self.data_handler.newly_added_files[file][group].keys():
-                        tag = f'{File.only_filename(input_path=str(file), with_extension=False)}/{group}/{table}'
-                        table_node = dpg.add_selectable(label=table,
-                                                       parent=group_node,
-                                                       callback=lambda: print(self.data_handler.files[file][group][table].attrs))
+                        dpg.add_selectable(label=table,
+                                           parent=group_node,
+                                           callback=lambda: print(self.data_handler.files[file][group][table].attrs))
