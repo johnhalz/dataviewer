@@ -89,7 +89,7 @@ class MainView:
         dpg.configure_item(item='show_dev_button', show=not self.dev_mode)
         dpg.configure_item(item='hide_dev_button', show=self.dev_mode)
 
-    
+
     def _window_size(self, ratio: list, placement: str = 'center'):
         from screeninfo import get_monitors
         from os import environ
@@ -131,15 +131,28 @@ class MainView:
 
 
     def _open_file(self):
-        file_dialog = FileDialog()
-        files = file_dialog.open_file()
-        self.data_handler.add_files(files)
-        self._update_tree_view()
+
+        def open_and_update(files):
+            print(self.data_handler.files)
+            self.data_handler.add_files(files)
+            self._update_tree_view()
+
+        from sys import platform
+        if platform != 'darwin':
+            files = self.file_manager.open_file()
+            open_and_update(files)
+
+        else:
+            window_width, window_height, _, _ = self._window_size(ratio=[0.4, 0.5])
+            with dpg.file_dialog(label='Choose File or Folder...',
+                                width=window_width,
+                                height=window_height,
+                                modal=True, callback=lambda _, a, __ : open_and_update(list(a['selections'].values()))):
+                dpg.add_file_extension(".h5", color=(255, 255, 255, 255))
 
 
     def _open_folder(self):
-        file_dialog = FileDialog()
-        directory = file_dialog.open_dir()
+        directory = self.file_manager.open_dir()
 
         # Loop through h5 files in folder
         file_paths = []
@@ -165,6 +178,7 @@ class MainView:
             dpg.configure_item(item='tree_search', show=True)
 
             for file in self.data_handler.newly_added_files.keys():
+                print(file)
                 file_node = dpg.add_tree_node(label=File.only_filename(input_path=str(file)),
                                               parent=self.selectorview.tag,
                                               selectable=True)
