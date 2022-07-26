@@ -1,5 +1,5 @@
 import os
-from general_util import FileDialog, File
+from general_util import File, FileDialog
 
 from .selector_view import SelectorView
 from .metadata_view import MetadataView
@@ -18,7 +18,6 @@ from data_handler.data_handler import DataHandler
 class MainView:
     def __init__(self, data_handler: DataHandler) -> None:
         self.dev_mode: bool = False
-        self.screen_ratio = [0.5, 0.65]
         self.data_handler = data_handler
 
         self.view()
@@ -26,6 +25,7 @@ class MainView:
 
     def view(self):
 
+        self.file_manager = FileDialog()
         dpg.create_context()
 
         self._make_centered_text_possible()
@@ -36,19 +36,15 @@ class MainView:
             self.dataview = DataView()
             self.aboutview = AboutView()
 
-        screen_width, screen_height = self._screen_size()
         self._update_tree_view()
 
-        dpg.create_viewport(title='H5 Viewer',
-                            width=int(screen_width*self.screen_ratio[0]),
-                            height=int(screen_height*self.screen_ratio[1]),
-                            x_pos=int(screen_width*((1-self.screen_ratio[0])/2)),
-                            y_pos=int(screen_height*((1-self.screen_ratio[1])/2)))
+        window_width, window_height, window_xpos, window_ypos = self._window_size(ratio=[0.5, 0.65])
+
+        dpg.create_viewport(title='H5 Viewer', width=window_width, height=window_height, x_pos=window_xpos, y_pos=window_ypos)
 
         with dpg.viewport_menu_bar():
             with dpg.menu(label="File"):
-                dpg.add_menu_item(label="Open Files...", callback=self._open_file, shortcut="Ctrl O")
-                dpg.add_menu_item(label="Open Folder...", callback=self._open_folder, shortcut="Ctrl Shift O")
+                dpg.add_menu_item(label="Open...", callback=self._open_file, shortcut="Ctrl O")
                 with dpg.menu(label='Open Recent'):
                     dpg.add_menu_item(label="(None)", enabled=False)
 
@@ -94,14 +90,31 @@ class MainView:
         dpg.configure_item(item='hide_dev_button', show=self.dev_mode)
 
     
-    def _screen_size(self):
+    def _window_size(self, ratio: list, placement: str = 'center'):
         from screeninfo import get_monitors
         from os import environ
         
         environ['DISPLAY'] = ':0.0'
         screen = get_monitors()[0]
 
-        return screen.width, screen.height
+        window_width = int(screen.width * ratio[0])
+        window_height = int(screen.height * ratio[1])
+
+        if placement == 'center':
+            window_xpos = int(screen.width * ((1-ratio[0])/2) )
+            window_ypos = int(screen.height * ((1-ratio[1])/2) )
+        else:
+            if 'top' in placement:
+                window_ypos = 0
+            elif 'bottom' in placement:
+                window_ypos = screen.height - window_height
+
+            if 'left' in placement:
+                window_xpos = 0
+            elif 'right' in placement:
+                window_xpos = screen.width - window_width
+
+        return window_width, window_height, window_xpos, window_ypos
         
     
     def _make_centered_text_possible(self):
