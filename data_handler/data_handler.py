@@ -1,7 +1,9 @@
 import h5py
 
+
 class DataHandler:
     def __init__(self, file_list: list = None) -> None:
+
         if file_list is None:
             self.files = dict()
 
