@@ -19,6 +19,7 @@ class MainView:
     def __init__(self, data_handler: DataHandler) -> None:
         self.dev_mode: bool = False
         self.data_handler = data_handler
+        self.recent_files_log = 'config/recent_files.txt'
 
         self.view()
 
@@ -45,8 +46,8 @@ class MainView:
         with dpg.viewport_menu_bar():
             with dpg.menu(label="File"):
                 dpg.add_menu_item(label="Open...", callback=self._open_file, shortcut="Ctrl O")
-                with dpg.menu(label='Open Recent'):
-                    dpg.add_menu_item(label="(None)", enabled=False)
+                dpg.add_menu(label='Open Recent', tag='recent_files_menu_item')
+                    # dpg.add_menu_item(label="(None)", enabled=False, tag='no_recent_files_menu_item')
 
                 dpg.add_separator()
                 dpg.add_menu_item(label="Preferences")
@@ -66,6 +67,7 @@ class MainView:
                 dpg.add_menu_item(label="Show Developer Options", tag='show_dev_button', show=not self.dev_mode, callback=self._toggle_dev_mode)
                 dpg.add_menu_item(label="Hide Developer Options", tag='hide_dev_button', show=self.dev_mode, callback=self._toggle_dev_mode)
 
+        self._load_recent_files()
         dpg.configure_app(docking=True, docking_space=True, init_file="config/custom_gui_layout.ini", load_init_file=True)
         dpg.setup_dearpygui()
         dpg.set_primary_window(main_window, True) # Fill viewport
@@ -131,26 +133,57 @@ class MainView:
 
 
     def _open_file(self):
-
-        def open_and_update(files):
-            print(self.data_handler.files)
-            self.data_handler.add_files(files)
-            self._update_tree_view()
-
         from sys import platform
         if platform != 'darwin':
             files = self.file_manager.open_file()
-            open_and_update(files)
+            self._open_and_update(files)
 
         else:
             window_width, window_height, _, _ = self._window_size(ratio=[0.4, 0.5])
             with dpg.file_dialog(label='Choose File or Folder...',
                                 width=window_width,
                                 height=window_height,
-                                modal=True, callback=lambda _, a, __ : open_and_update(list(a['selections'].values()))):
+                                modal=True, callback=lambda _, a, __ : self._open_and_update(list(a['selections'].values()))):
                 dpg.add_file_extension(".h5", color=(255, 255, 255, 255))
+    
+
+    def _open_and_update(self, files):
+        if isinstance(files, str):
+            files = [files]
+
+        self.data_handler.add_files(files)
+        self._update_tree_view()
+        self._save_to_open_recent(files)
 
 
+    def _save_to_open_recent(self, files):
+        if not File.path_exists(self.recent_files_log):
+            with open(self.recent_files_log, 'w') as f:
+                f.write('\n'.join(files))
+
+        else:
+            with open(self.recent_files_log, 'a') as f:
+                # TODO: Check that file is not already in txt file (if yes, move to bottom of txt file)
+                f.writelines('\n'.join(files))
+
+
+    def _load_recent_files(self):
+        if not File.path_exists(self.recent_files_log):
+            dpg.add_menu_item(label="(None)", enabled=False, tag='no_recent_files_menu_item', parent='recent_files_menu_item')
+        else:
+            with open(self.recent_files_log, 'r') as f:
+                lines = f.readlines()
+
+                if len(lines) == 0:
+                    dpg.add_menu_item(label="(None)", enabled=False, tag='no_recent_files_menu_item', parent='recent_files_menu_item')
+                else:
+                    # Most recently opened file is at bottom of list
+                    for file in reversed(lines):
+                        dpg.add_menu_item(label=file, parent='recent_files_menu_item', callback=lambda: self._open_and_update(file))
+
+
+
+    # TODO: Integrate with normal open operation
     def _open_folder(self):
         directory = self.file_manager.open_dir()
 
